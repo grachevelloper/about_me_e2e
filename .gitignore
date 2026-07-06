@@ -1,7 +1,6 @@
 node_modules/
-.worktrees/
 playwright-report/
 test-results/
-.auth/
+storage/
 .env
 .DS_Store
