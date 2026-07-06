@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "test": "playwright test",
-    "test:ui": "playwright test --ui",
-    "test:headed": "playwright test --headed",
+    "test": "playwright test -c e2e/playwright.config.ts",
+    "test:ui": "playwright test -c e2e/playwright.config.ts --ui",
+    "test:headed": "playwright test -c e2e/playwright.config.ts --headed",
     "report": "playwright show-report"
   },
   "devDependencies": {
