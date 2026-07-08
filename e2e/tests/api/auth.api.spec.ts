@@ -55,8 +55,8 @@ test.describe('auth api', () => {
   test('POST /auth/signin authenticates valid credentials and sets cookies', async ({ app, guestApi }) => {
     const response = await guestApi.post(`${API_PREFIX}/auth/signin`, {
       data: {
-        email: app.users.userA.email,
-        password: app.users.userA.password,
+        email: app.users.primaryUser.email,
+        password: app.users.primaryUser.password,
       },
     });
 
@@ -68,7 +68,7 @@ test.describe('auth api', () => {
   test('POST /auth/signin rejects wrong password', async ({ app, guestApi }) => {
     const response = await guestApi.post(`${API_PREFIX}/auth/signin`, {
       data: {
-        email: app.users.userA.email,
+        email: app.users.primaryUser.email,
         password: 'WrongPassword123',
       },
     });
@@ -105,8 +105,8 @@ test.describe('auth api', () => {
       await expectStatus(
         await api.post(`${API_PREFIX}/auth/signin`, {
           data: {
-            email: app.users.userA.email,
-            password: app.users.userA.password,
+            email: app.users.primaryUser.email,
+            password: app.users.primaryUser.password,
           },
         }),
         200,
@@ -147,8 +147,8 @@ test.describe('auth api', () => {
       await expectStatus(
         await api.post(`${API_PREFIX}/auth/signin`, {
           data: {
-            email: app.users.userA.email,
-            password: app.users.userA.password,
+            email: app.users.primaryUser.email,
+            password: app.users.primaryUser.password,
           },
         }),
         200,
@@ -169,8 +169,8 @@ test.describe('auth api', () => {
     await expectStatus(response, 401);
   });
 
-  test('GET /auth/check returns true for authenticated user', async ({ userAApi }) => {
-    const response = await userAApi.get(`${API_PREFIX}/auth/check`);
+  test('GET /auth/check returns true for authenticated user', async ({ primaryUserApi }) => {
+    const response = await primaryUserApi.get(`${API_PREFIX}/auth/check`);
     await expectStatus(response, 200);
     expect(await response.json()).toBe(true);
   });
@@ -180,12 +180,12 @@ test.describe('auth api', () => {
     await expectStatus(response, 401);
   });
 
-  test('GET /auth/me returns the current user', async ({ app, userAApi }) => {
-    const response = await userAApi.get(`${API_PREFIX}/auth/me`);
+  test('GET /auth/me returns the current user', async ({ app, primaryUserApi }) => {
+    const response = await primaryUserApi.get(`${API_PREFIX}/auth/me`);
     await expectStatus(response, 200);
     expect(await response.json()).toMatchObject({
-      id: app.users.userA.id,
-      email: app.users.userA.email,
+      id: app.users.primaryUser.id,
+      email: app.users.primaryUser.email,
     });
   });
 

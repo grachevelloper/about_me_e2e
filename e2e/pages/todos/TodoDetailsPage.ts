@@ -12,6 +12,6 @@ export class TodoDetailsPage {
   }
 
   async expectChecklistAreaVisible(): Promise<void> {
-    await expect(this.page.locator('body')).toContainText(/checklist|чек.?лист|список/i);
+    await expect(this.page.locator('[data-marker="checklist-card"]')).toBeVisible();
   }
 }

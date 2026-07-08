@@ -9,8 +9,8 @@ export class RegistrationPage {
 
   constructor(private readonly page: Page) {
     this.nameInput = page.getByPlaceholder(/name|имя/i);
-    this.emailInput = page.getByPlaceholder(/email|почт/i);
-    this.passwordInput = page.getByPlaceholder(/^password$|пароль$/i);
+    this.emailInput = page.locator('[data-marker="auth-email-input"]');
+    this.passwordInput = page.locator('[data-marker="auth-password-input"]');
     this.confirmPasswordInput = page.getByPlaceholder(/confirm|повтор/i);
     this.nextOrSubmitButton = page.getByRole('button', { name: /далее|зарегистр|завершить/i });
   }

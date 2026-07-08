@@ -16,10 +16,10 @@ async function createSignedInUser(runId: string, label: string) {
 }
 
 test.describe('users api', () => {
-  test('GET /users/me returns self for user, writer, and admin', async ({ app, userAApi, writerAApi, adminApi }) => {
+  test('GET /users/me returns self for user, writer, and admin', async ({ app, primaryUserApi, writerApi, adminApi }) => {
     for (const [api, user] of [
-      [userAApi, app.users.userA],
-      [writerAApi, app.users.writerA],
+      [primaryUserApi, app.users.primaryUser],
+      [writerApi, app.users.writer],
       [adminApi, app.users.admin],
     ] as const) {
       const response = await api.get(`${API_PREFIX}/users/me`);
@@ -72,8 +72,8 @@ test.describe('users api', () => {
     }
   });
 
-  test('PATCH /users/me rejects unknown fields', async ({ userAApi }) => {
-    const response = await userAApi.patch(`${API_PREFIX}/users/me`, { data: { unknownField: 'value' } });
+  test('PATCH /users/me rejects unknown fields', async ({ primaryUserApi }) => {
+    const response = await primaryUserApi.patch(`${API_PREFIX}/users/me`, { data: { unknownField: 'value' } });
     await expectStatus(response, 400);
   });
 
@@ -103,8 +103,8 @@ test.describe('users api', () => {
     }
   });
 
-  test('PATCH /users/me/password rejects wrong currentPassword', async ({ userAApi }) => {
-    const response = await userAApi.patch(`${API_PREFIX}/users/me/password`, {
+  test('PATCH /users/me/password rejects wrong currentPassword', async ({ primaryUserApi }) => {
+    const response = await primaryUserApi.patch(`${API_PREFIX}/users/me/password`, {
       data: {
         currentPassword: 'WrongPassword123',
         newPassword: 'NewPassword123',
@@ -140,11 +140,11 @@ test.describe('users api', () => {
     expectNoPassword(body);
   });
 
-  test('GET /users/:id prevents ordinary user from reading another user', async ({ app, userAApi }) => {
+  test('GET /users/:id prevents ordinary user from reading another user', async ({ app, primaryUserApi }) => {
     const { api, created } = await createSignedInUser(app.runId, 'users-user-read-target');
     await api.dispose();
 
-    const response = await userAApi.get(`${API_PREFIX}/users/${created.id}`);
+    const response = await primaryUserApi.get(`${API_PREFIX}/users/${created.id}`);
     await expectStatus(response, 403);
   });
 
@@ -158,11 +158,11 @@ test.describe('users api', () => {
     expect(await response.json()).toMatchObject({ id: created.id, username });
   });
 
-  test('PATCH /users/:id prevents ordinary user from updating another user', async ({ app, userAApi }) => {
+  test('PATCH /users/:id prevents ordinary user from updating another user', async ({ app, primaryUserApi }) => {
     const { api, created } = await createSignedInUser(app.runId, 'users-user-update-target');
     await api.dispose();
 
-    const response = await userAApi.patch(`${API_PREFIX}/users/${created.id}`, { data: { username: 'blocked' } });
+    const response = await primaryUserApi.patch(`${API_PREFIX}/users/${created.id}`, { data: { username: 'blocked' } });
     await expectStatus(response, 403);
   });
 
@@ -170,11 +170,11 @@ test.describe('users api', () => {
     test.fixme(true, 'BUG: users service forbids admin from changing another user password');
   });
 
-  test('PATCH /users/:id/password prevents ordinary user from changing another user password', async ({ app, userAApi }) => {
+  test('PATCH /users/:id/password prevents ordinary user from changing another user password', async ({ app, primaryUserApi }) => {
     const { api, created } = await createSignedInUser(app.runId, 'users-password-target');
     await api.dispose();
 
-    const response = await userAApi.patch(`${API_PREFIX}/users/${created.id}/password`, {
+    const response = await primaryUserApi.patch(`${API_PREFIX}/users/${created.id}/password`, {
       data: {
         currentPassword: 'Password123',
         newPassword: 'NewPassword123',
@@ -197,11 +197,11 @@ test.describe('users api', () => {
     }
   });
 
-  test('DELETE /users/:id prevents non-admin deletion', async ({ app, userAApi }) => {
+  test('DELETE /users/:id prevents non-admin deletion', async ({ app, primaryUserApi }) => {
     const { api, created } = await createSignedInUser(app.runId, 'users-delete-target');
     await api.dispose();
 
-    const response = await userAApi.delete(`${API_PREFIX}/users/${created.id}`);
+    const response = await primaryUserApi.delete(`${API_PREFIX}/users/${created.id}`);
     await expectStatus(response, 403);
   });
 

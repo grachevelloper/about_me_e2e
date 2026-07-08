@@ -1,11 +1,12 @@
 import type { Todo } from '../../../data/todos';
 import type { TestContext } from '../../../setup/test-context';
-import { API_PREFIX, expectOk, newApiContext } from '..';
+import { API_PREFIX, newApiContext } from '../client';
+import { expectOk } from '../../assertions/status';
 import type { PaginatedResponse } from '../../assertions/pagination';
 
 export async function createTodo(
   context: TestContext,
-  author: keyof TestContext['users'] = 'userA',
+  author: keyof TestContext['users'] = 'primaryUser',
   overrides: Partial<Pick<Todo, 'title' | 'content' | 'priority' | 'state'>> = {},
 ): Promise<Todo> {
   const user = context.users[author];

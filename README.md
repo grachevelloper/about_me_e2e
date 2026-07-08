@@ -2,6 +2,7 @@
 
 E2E tests powered by Playwright.
 
+> for myself:
 Русскоязычный практический гайд: [PLAYWRIGHT_GUIDE_RU.md](./PLAYWRIGHT_GUIDE_RU.md).
 
 ## Commands

@@ -46,28 +46,45 @@ export function moveTodoToPublicOwner(todoId: string): void {
   runSql(`UPDATE "todos" SET "author_id" = ${sqlLiteral(publicOwnerId)} WHERE "id" = ${sqlLiteral(todoId)};`);
 }
 
-export function cleanupRunData(runId: string): void {
-  const pattern = `%${runId}%`;
+function cleanupData(textPattern: string, userEmailPattern: string): void {
+  const text = sqlLiteral(textPattern);
+  const userEmail = sqlLiteral(userEmailPattern);
 
   runSql(`
-    DELETE FROM "likes" WHERE "author_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "comments" WHERE "content" LIKE ${sqlLiteral(pattern)}
-      OR "author_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "attachments" WHERE "url" LIKE ${sqlLiteral(pattern)}
-      OR "s3_key" LIKE ${sqlLiteral(pattern)}
+    DELETE FROM "likes" WHERE "author_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail});
+    DELETE FROM "comments" WHERE "content" LIKE ${text}
+      OR "author_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail});
+    DELETE FROM "attachments" WHERE "url" LIKE ${text}
+      OR "s3_key" LIKE ${text}
       OR "entity_id" IN (
-        SELECT "id" FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)}
-        UNION SELECT "id" FROM "articles" WHERE "title" LIKE ${sqlLiteral(pattern)}
-        UNION SELECT "id" FROM "todos" WHERE "title" LIKE ${sqlLiteral(pattern)}
+        SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail}
+        UNION SELECT "id" FROM "articles" WHERE "title" LIKE ${text}
+          OR "authorId" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail})
+        UNION SELECT "id" FROM "todos" WHERE "title" LIKE ${text}
+          OR "author_id" IN (SELECT "id"::text FROM "users" WHERE "email" LIKE ${userEmail})
       );
-    DELETE FROM "article_tags" WHERE "articleId" IN (SELECT "id" FROM "articles" WHERE "title" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "articles" WHERE "title" LIKE ${sqlLiteral(pattern)}
-      OR "authorId" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "tags" WHERE "name" LIKE ${sqlLiteral(pattern)};
-    DELETE FROM "checklists" WHERE "todo_id" IN (SELECT "id" FROM "todos" WHERE "title" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "todos" WHERE "title" LIKE ${sqlLiteral(pattern)}
-      OR "author_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "refresh_tokens" WHERE "user_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)});
-    DELETE FROM "users" WHERE "email" LIKE ${sqlLiteral(pattern)};
+    DELETE FROM "article_tags" WHERE "articleId" IN (
+      SELECT "id" FROM "articles" WHERE "title" LIKE ${text}
+        OR "authorId" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail})
+    );
+    DELETE FROM "articles" WHERE "title" LIKE ${text}
+      OR "authorId" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail});
+    DELETE FROM "tags" WHERE "name" LIKE ${text};
+    DELETE FROM "checklists" WHERE "todo_id" IN (
+      SELECT "id" FROM "todos" WHERE "title" LIKE ${text}
+        OR "author_id" IN (SELECT "id"::text FROM "users" WHERE "email" LIKE ${userEmail})
+    );
+    DELETE FROM "todos" WHERE "title" LIKE ${text}
+      OR "author_id" IN (SELECT "id"::text FROM "users" WHERE "email" LIKE ${userEmail});
+    DELETE FROM "refresh_tokens" WHERE "user_id" IN (SELECT "id" FROM "users" WHERE "email" LIKE ${userEmail});
+    DELETE FROM "users" WHERE "email" LIKE ${userEmail};
   `);
+}
+
+export function cleanupRunData(runId: string): void {
+  cleanupData(`%${runId}%`, `%${runId}%`);
+}
+
+export function cleanupE2eData(): void {
+  cleanupData('%e2e-%', '%@e2e.local');
 }

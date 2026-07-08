@@ -1,7 +1,7 @@
 export type Role = 'User' | 'Writer' | 'Admin';
 
 export interface TestUser {
-  key: 'userA' | 'userB' | 'writerA' | 'writerB' | 'admin';
+  key: 'primaryUser' | 'secondaryUser' | 'writer' | 'secondaryWriter' | 'admin';
   username: string;
   email: string;
   password: string;

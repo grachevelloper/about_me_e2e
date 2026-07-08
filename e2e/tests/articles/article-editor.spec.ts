@@ -8,11 +8,11 @@ test.describe('article editor', () => {
     test.slow();
 
     const label = `${app.runId}-${testInfo.project.name}`;
-    const draft = await createDraftArticle(app, 'writerA', {
+    const draft = await createDraftArticle(app, 'writer', {
       title: `${label} editor draft`,
       content: `${label} editor draft content`,
     });
-    const session = await createAuthenticatedPage(browser, app, 'writerA', (page) => ({
+    const session = await createAuthenticatedPage(browser, app, 'writer', (page) => ({
       draftEditorPage: new DraftEditorPage(page),
     }));
 

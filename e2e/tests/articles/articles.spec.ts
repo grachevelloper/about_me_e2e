@@ -6,15 +6,15 @@ test.describe('articles list', () => {
     test.slow();
 
     const label = `${app.runId}-${testInfo.project.name}`;
-    const draft = await createDraftArticle(app, 'writerA', {
+    const draft = await createDraftArticle(app, 'writer', {
       title: `${label} hidden draft`,
       content: `${label} hidden draft content`,
     });
-    const published = await createDraftArticle(app, 'writerA', {
+    const published = await createDraftArticle(app, 'writer', {
       title: `${label} published article`,
       content: `${label} published article content`,
     });
-    await publishArticle(app, published.id, 'writerA');
+    await publishArticle(app, published.id, 'writer');
 
     const articles = await listArticles(label);
     expect(articles.items.map((article) => article.id)).toContain(published.id);

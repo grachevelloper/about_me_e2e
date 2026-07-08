@@ -18,16 +18,16 @@ test.describe('auth', () => {
 
   test('signin with wrong password shows a user-visible error', async ({ loginPage, app }) => {
     await loginPage.open();
-    await loginPage.login(app.users.userA.email, 'WrongPassword123');
+    await loginPage.login(app.users.primaryUser.email, 'WrongPassword123');
 
     await loginPage.expectLoginError();
   });
 
   test('signin authenticates user session', async ({ loginPage, appShell, app }) => {
     await loginPage.open();
-    await loginPage.login(app.users.userA.email, app.users.userA.password);
+    await loginPage.login(app.users.primaryUser.email, app.users.primaryUser.password);
 
-    await appShell.expectUserVisible(app.users.userA.username);
+    await appShell.expectUserVisible(app.users.primaryUser.username);
   });
 
   test('anonymous user cannot perform protected mutations', async () => {

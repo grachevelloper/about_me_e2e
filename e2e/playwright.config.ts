@@ -1,10 +1,15 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const baseURL = process.env.BASE_URL ?? 'http://localhost';
+const baseURL = process.env.BASE_URL;
+
+if (!baseURL) {
+  throw new Error('BASE_URL environment variable is required for e2e tests');
+}
 
 export default defineConfig({
   testDir: './tests',
   globalSetup: './setup/global-setup.ts',
+  globalTeardown: './setup/global-teardown.ts',
   fullyParallel: true,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 2 : 0,
@@ -25,16 +30,6 @@ export default defineConfig({
       name: 'chromium',
       testIgnore: /api\/.*\.api\.spec\.ts/,
       use: { ...devices['Desktop Chrome'] }
-    },
-    // {
-    //   name: 'firefox',
-    //   testIgnore: /api\/.*\.api\.spec\.ts/,
-    //   use: { ...devices['Desktop Firefox'] }
-    // },
-    // {
-    //   name: 'webkit',
-    //   testIgnore: /api\/.*\.api\.spec\.ts/,
-    //   use: { ...devices['Desktop Safari'] }
-    // }
+    }
   ]
 });

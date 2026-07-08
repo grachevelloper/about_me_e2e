@@ -1,5 +1,6 @@
 import type { TestContext } from '../../../setup/test-context';
-import { API_PREFIX, expectOk, newApiContext } from '..';
+import { API_PREFIX, newApiContext } from '../client';
+import { expectOk } from '../../assertions/status';
 
 export type EntityCommentType = 'article' | 'todo';
 
@@ -18,7 +19,7 @@ export async function createComment(
   context: TestContext,
   entityType: EntityCommentType,
   entityId: string,
-  author: keyof TestContext['users'] = 'userA',
+  author: keyof TestContext['users'] = 'primaryUser',
   parentId?: string,
 ): Promise<CommentResponse> {
   const user = context.users[author];

@@ -10,10 +10,14 @@ export class ArticlesPage {
   }
 
   async expectArticleVisible(article: Pick<Article, 'title'>): Promise<void> {
-    await expect(this.page.getByText(article.title)).toBeVisible();
+    await expect(
+      this.page.locator('[data-marker="article-card"]').filter({ hasText: article.title }),
+    ).toBeVisible();
   }
 
   async expectArticleHidden(article: Pick<Article, 'title'>): Promise<void> {
-    await expect(this.page.getByText(article.title)).toHaveCount(0);
+    await expect(
+      this.page.locator('[data-marker="article-card"]').filter({ hasText: article.title }),
+    ).toHaveCount(0);
   }
 }

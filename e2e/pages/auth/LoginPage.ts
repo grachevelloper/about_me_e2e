@@ -7,9 +7,9 @@ export class LoginPage {
   readonly authError: Locator;
 
   constructor(private readonly page: Page) {
-    this.emailInput = page.getByPlaceholder(/email|почт/i);
-    this.passwordInput = page.getByPlaceholder(/password|пароль/i);
-    this.submitButton = page.getByRole('button', { name: /sign in|войти/i });
+    this.emailInput = page.locator('[data-marker="auth-email-input"]');
+    this.passwordInput = page.locator('[data-marker="auth-password-input"]');
+    this.submitButton = page.locator('[data-marker="auth-submit"]');
     this.authError = page.getByText(/invalid credentials|incorrect password|неверный пароль/i);
   }
 

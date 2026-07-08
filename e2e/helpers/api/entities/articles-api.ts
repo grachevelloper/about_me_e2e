@@ -1,11 +1,12 @@
 import type { Article } from '../../../data/articles';
 import type { TestContext } from '../../../setup/test-context';
-import { API_PREFIX, expectOk, newApiContext } from '..';
+import { API_PREFIX, newApiContext } from '../client';
+import { expectOk } from '../../assertions/status';
 import type { PaginatedResponse } from '../../assertions/pagination';
 
 export async function createDraftArticle(
   context: TestContext,
-  author: 'writerA' | 'writerB' | 'admin' = 'writerA',
+  author: 'writer' | 'secondaryWriter' | 'admin' = 'writer',
   overrides: Partial<Pick<Article, 'title' | 'content' | 'readTime'>> = {},
 ): Promise<Article> {
   const user = context.users[author];
@@ -26,7 +27,7 @@ export async function createDraftArticle(
   }
 }
 
-export async function publishArticle(context: TestContext, articleId: string, author: 'writerA' | 'writerB' | 'admin' = 'writerA'): Promise<Article> {
+export async function publishArticle(context: TestContext, articleId: string, author: 'writer' | 'secondaryWriter' | 'admin' = 'writer'): Promise<Article> {
   const user = context.users[author];
   const api = await newApiContext({ storageState: user.storageStatePath });
 

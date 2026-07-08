@@ -1,7 +1,15 @@
-import { expect, type Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 export class DraftEditorPage {
-  constructor(private readonly page: Page) {}
+  readonly titleInput: Locator;
+  readonly contentEditor: Locator;
+  readonly publishButton: Locator;
+
+  constructor(private readonly page: Page) {
+    this.titleInput = page.locator('[data-marker="draft-title-input"]');
+    this.contentEditor = page.locator('[data-marker="draft-content-editor"]');
+    this.publishButton = page.locator('[data-marker="draft-publish-button"]');
+  }
 
   async open(draftId: string): Promise<void> {
     await this.page.goto(`/articles/draft/${draftId}`);
@@ -12,6 +20,6 @@ export class DraftEditorPage {
   }
 
   async expectTitleVisible(title: string): Promise<void> {
-    await expect(this.page.locator('body')).toContainText(title);
+    await expect(this.titleInput).toHaveValue(title);
   }
 }

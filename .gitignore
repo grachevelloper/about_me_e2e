@@ -4,3 +4,4 @@ test-results/
 storage/
 .env
 .DS_Store
+docs

@@ -15,11 +15,11 @@ test.describe('permissions', () => {
   });
 
   test('another writer cannot edit writer draft', async ({ app }) => {
-    const draft = await createDraftArticle(app, 'writerA', {
+    const draft = await createDraftArticle(app, 'writer', {
       title: `${app.runId} writer ownership`,
       content: `${app.runId} writer ownership content`,
     });
-    const api = await newApiContext({ storageState: app.users.writerB.storageStatePath });
+    const api = await newApiContext({ storageState: app.users.secondaryWriter.storageStatePath });
 
     try {
       const response = await api.patch(`${API_PREFIX}/articles/${draft.id}`, {

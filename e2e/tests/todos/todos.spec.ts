@@ -5,7 +5,7 @@ test.describe('todos', () => {
   test('authenticated user creates todo and anonymous user can read it', async ({ todoDetailsPage, app }) => {
     test.fixme(true, 'BUG: todos created by regular users are not exposed through public todo list/details');
 
-    const todo = await createTodo(app, 'userA', {
+    const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} readable todo`,
       content: `${app.runId} readable todo content`,
     });

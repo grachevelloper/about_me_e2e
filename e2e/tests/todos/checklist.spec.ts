@@ -8,11 +8,11 @@ test.describe('checklist', () => {
     test.slow();
 
     const label = `${app.runId}-${testInfo.project.name}`;
-    const todo = await createTodo(app, 'userA', {
+    const todo = await createTodo(app, 'primaryUser', {
       title: `${label} checklist todo`,
       content: `${label} checklist todo content`,
     });
-    const session = await createAuthenticatedPage(browser, app, 'userA', (page) => ({
+    const session = await createAuthenticatedPage(browser, app, 'primaryUser', (page) => ({
       todoDetailsPage: new TodoDetailsPage(page),
     }));
 

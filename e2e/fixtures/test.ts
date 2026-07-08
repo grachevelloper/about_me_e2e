@@ -6,19 +6,19 @@ import { DraftsPage } from '../pages/articles/DraftsPage';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { RegistrationPage } from '../pages/auth/RegistrationPage';
 import { ErrorPage } from '../pages/errors/ErrorPage';
-import { AppShell } from '../pages/navigation/AppShell';
 import { NewTodoPage } from '../pages/todos/NewTodoPage';
 import { TodoDetailsPage } from '../pages/todos/TodoDetailsPage';
 import { newApiContext } from '../helpers/api/client';
+import { AppShell } from '../helpers/navigation/AppShell';
 import { readTestContext, type TestContext } from '../setup/test-context';
 
 type AppFixtures = {
   app: TestContext;
   guestApi: APIRequestContext;
-  userAApi: APIRequestContext;
-  userBApi: APIRequestContext;
-  writerAApi: APIRequestContext;
-  writerBApi: APIRequestContext;
+  primaryUserApi: APIRequestContext;
+  secondaryUserApi: APIRequestContext;
+  writerApi: APIRequestContext;
+  secondaryWriterApi: APIRequestContext;
   adminApi: APIRequestContext;
   appShell: AppShell;
   articlesPage: ArticlesPage;
@@ -79,17 +79,17 @@ export const test = base.extend<AppFixtures>({
   guestApi: async ({}, use) => {
     await useApiContext(use);
   },
-  userAApi: async ({ app }, use) => {
-    await useApiContext(use, app.users.userA.storageStatePath);
+  primaryUserApi: async ({ app }, use) => {
+    await useApiContext(use, app.users.primaryUser.storageStatePath);
   },
-  userBApi: async ({ app }, use) => {
-    await useApiContext(use, app.users.userB.storageStatePath);
+  secondaryUserApi: async ({ app }, use) => {
+    await useApiContext(use, app.users.secondaryUser.storageStatePath);
   },
-  writerAApi: async ({ app }, use) => {
-    await useApiContext(use, app.users.writerA.storageStatePath);
+  writerApi: async ({ app }, use) => {
+    await useApiContext(use, app.users.writer.storageStatePath);
   },
-  writerBApi: async ({ app }, use) => {
-    await useApiContext(use, app.users.writerB.storageStatePath);
+  secondaryWriterApi: async ({ app }, use) => {
+    await useApiContext(use, app.users.secondaryWriter.storageStatePath);
   },
   adminApi: async ({ app }, use) => {
     await useApiContext(use, app.users.admin.storageStatePath);

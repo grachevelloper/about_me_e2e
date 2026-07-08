@@ -18,7 +18,7 @@ test.describe('navigation', () => {
   });
 
   test('writer can open drafts page with authenticated storage state', async ({ browser, app }) => {
-    const session = await createAuthenticatedPage(browser, app, 'writerA', (page) => ({
+    const session = await createAuthenticatedPage(browser, app, 'writer', (page) => ({
       draftsPage: new DraftsPage(page),
     }));
 

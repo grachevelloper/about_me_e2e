@@ -59,31 +59,43 @@ npx playwright test --project=chromium --grep "@critical"
 - If a real bug is found, keep the test as the correct expected behavior and mark it with `test.fixme(true, 'BUG: concise reason')` or tag the test title with `@bug`.
 - Prefer `getByRole`, `getByLabel`, `getByPlaceholder`, and stable visible text.
 - Use CSS selectors only when accessible locators are impossible.
-- If Ant Design or MDXEditor makes a locator unstable, add a note in the test and create a small frontend follow-up to add `data-testid`.
+- If Ant Design or MDXEditor makes a locator unstable, add a note in the test and create a small frontend follow-up to add `data-marker`.
 - No test should depend on data created by another test.
 - Use unique `runId`, for example `e2e-${Date.now()}`, in all generated names.
 - Clean up created users, todos, articles, comments, likes, tags, and attachments where the backend supports it.
 - Fail on unexpected `pageerror` and critical `console.error`, except explicitly documented known frontend bugs.
 
+## Frontend Data-Marker Follow-Up
+
+After current PR comments are fixed, add stable frontend markers for E2E-only selectors. The goal is that any agent can open this file, go to the frontend repository, and add the required `[data-marker]` attributes without guessing which elements tests need.
+
+- [ ] In `../fullstack_exemplary_app/fe`, add markers for auth controls: `auth-email-input`, `auth-password-input`, `auth-submit`, `auth-signup-link`, `auth-signin-link`.
+- [ ] Add markers for app shell and navigation: `nav-home-link`, `nav-resume-link`, `nav-articles-link`, `nav-drafts-link`, `nav-user-name`, `nav-logout-button`.
+- [ ] Add markers for article list and editor flows: `article-card`, `article-title`, `draft-title-input`, `draft-content-editor`, `draft-save-button`, `draft-publish-button`.
+- [ ] Add markers for todo flows: `todo-title-input`, `todo-content-input`, `todo-priority-select`, `todo-state-select`, `todo-create-button`, `todo-card`.
+- [ ] Add markers for checklist and comments: `checklist-add-input`, `checklist-add-button`, `checklist-item`, `comment-input`, `comment-submit-button`.
+- [ ] Update Page Objects in `e2e/pages/` to use `[data-marker="..."]` only where role, label, placeholder, or stable visible text locators are not reliable.
+- [ ] Keep tests behavior-focused: marker locators are for finding controls, while assertions should still verify visible user behavior.
+
 ## Required Roles
 
 Create these users during global setup:
 
-- `userA`: `Role.USER`
-- `userB`: `Role.USER`
-- `writerA`: `Role.WRITER`
-- `writerB`: `Role.WRITER`
+- `primaryUser`: `Role.USER`
+- `secondaryUser`: `Role.USER`
+- `writer`: `Role.WRITER`
+- `secondaryWriter`: `Role.WRITER`
 - `admin`: `Role.ADMIN`
 
-Signup creates regular users only, so `writerA`, `writerB`, and `admin` must be created through DB setup, backend fixture, or privileged helper.
+Signup creates regular users only, so `writer`, `secondaryWriter`, and `admin` must be created through DB setup, backend fixture, or privileged helper.
 
 Persist storage states:
 
 ```text
-storage/userA.json
-storage/userB.json
-storage/writerA.json
-storage/writerB.json
+storage/primaryUser.json
+storage/secondaryUser.json
+storage/writer.json
+storage/secondaryWriter.json
 storage/admin.json
 ```
 
@@ -199,12 +211,12 @@ storage/admin.json
 - Create or modify: `e2e/data/articles.ts`
 - Create or modify: `e2e/data/files.ts`
 
-- [ ] Add `BASE_URL` defaulting to `http://fe_fullstack-app.localhost`.
+- [ ] Require `BASE_URL`; fail fast with a clear error if it is not set.
 - [ ] Add `API_PREFIX = '/api'`.
 - [ ] Add `waitForAppReady()` that checks `GET /api/articles` and `GET /api/todos`.
 - [ ] Add `runId` to global test context.
 - [ ] Add API contexts for guest and each role.
-- [ ] Add authenticated browser contexts for `userA`, `userB`, `writerA`, `writerB`, and `admin`.
+- [ ] Add authenticated browser contexts for `primaryUser`, `secondaryUser`, `writer`, `secondaryWriter`, and `admin`.
 - [ ] Add data factories for valid and invalid users, todos, articles, comments, tags, and upload files.
 - [ ] Add cleanup helpers for all created entities.
 - [ ] Add shared assertions for status codes, redirects, cookies, and pagination shape.
@@ -301,130 +313,130 @@ storage/admin.json
 **Files:**
 - Create: `e2e/tests/api/checklist.api.spec.ts`
 
-- [ ] `POST /todos/:todoId/checklist` creates an empty checklist.
-- [ ] `GET /todos/:todoId/checklist` returns the created checklist.
-- [ ] `POST /todos/:todoId/checklist/items` adds an item.
-- [ ] `POST /items` rejects empty `text`.
-- [ ] `PATCH /items/:index` updates item text.
-- [ ] `PATCH /items/:index` rejects negative index.
-- [ ] `PATCH /items/:index` rejects non-number index.
-- [ ] `PATCH /items/:index` rejects out-of-range index.
-- [ ] `PATCH /progress` increments progress.
-- [ ] `PATCH /progress` decrements progress.
-- [ ] `PATCH /progress` does not allow progress below zero.
-- [ ] `PATCH /progress` does not allow progress above item count.
-- [ ] `DELETE /items/:index` removes an item.
-- [ ] Removing a completed item keeps progress valid.
-- [ ] `DELETE /checklist` deletes checklist.
-- [ ] Deleted checklist returns expected missing state.
-- [ ] Guest requests return 401.
-- [ ] Non-owner requests return 403 if ownership is enforced.
-- [ ] Invalid todo UUID returns 400.
-- [ ] Missing todo returns 404.
+- [x] `POST /todos/:todoId/checklist` creates an empty checklist.
+- [x] `GET /todos/:todoId/checklist` returns the created checklist.
+- [x] `POST /todos/:todoId/checklist/items` adds an item.
+- [x] `POST /items` rejects empty `text`.
+- [x] `PATCH /items/:index` updates item text.
+- [x] `PATCH /items/:index` rejects negative index.
+- [x] `PATCH /items/:index` rejects non-number index.
+- [x] `PATCH /items/:index` rejects out-of-range index.
+- [x] `PATCH /progress` increments progress.
+- [x] `PATCH /progress` decrements progress.
+- [x] `PATCH /progress` does not allow progress below zero.
+- [x] `PATCH /progress` does not allow progress above item count.
+- [x] `DELETE /items/:index` removes an item.
+- [x] Removing a completed item keeps progress valid.
+- [x] `DELETE /checklist` deletes checklist.
+- [x] Deleted checklist returns expected missing state.
+- [x] Guest requests return 401.
+- [x] Non-owner requests return 403 if ownership is enforced.
+- [x] Invalid todo UUID returns 400.
+- [x] Missing todo returns 404.
 
 ## Task 7: Backend API Coverage - Articles
 
 **Files:**
 - Create: `e2e/tests/api/articles.api.spec.ts`
 
-- [ ] `POST /articles` creates a draft for writer.
-- [ ] `POST /articles` creates a draft for admin.
-- [ ] `POST /articles` prevents guest.
-- [ ] `POST /articles` prevents ordinary user if write role is required.
-- [ ] `POST /articles` rejects empty title.
-- [ ] `POST /articles` rejects empty content.
-- [ ] `POST /articles` rejects `readTime` less than 1.
-- [ ] `POST /articles` accepts tags array.
-- [ ] `GET /articles` is public.
-- [ ] `GET /articles` returns published articles.
-- [ ] `GET /articles` does not return drafts.
-- [ ] `GET /articles` supports pagination.
-- [ ] `GET /articles` supports `search`.
-- [ ] `GET /articles` supports `authorId`.
-- [ ] `GET /articles` supports comma-separated `tags`.
-- [ ] `GET /articles` supports `minLikes`.
-- [ ] `GET /articles` supports `createdAfter`.
-- [ ] `GET /articles` supports `sortBy=createdAt`.
-- [ ] `GET /articles` supports `sortBy=updatedAt`.
-- [ ] `GET /articles` supports `order=ASC` and `order=DESC`.
-- [ ] `GET /articles/drafts` returns writer's own drafts.
-- [ ] `GET /articles/drafts` returns 401 for guest.
-- [ ] `GET /articles/author/:authorId` is public.
-- [ ] `GET /articles/:id` returns published article for guest.
-- [ ] `GET /articles/:id` returns own draft for author.
-- [ ] `GET /articles/:id` prevents another writer from reading private draft.
-- [ ] `PATCH /articles/:id` updates title.
-- [ ] `PATCH /articles/:id` updates content.
-- [ ] `PATCH /articles/:id` updates image URL.
-- [ ] `PATCH /articles/:id` rejects invalid image URL.
-- [ ] `PATCH /articles/:id` updates readTime.
-- [ ] `PATCH /articles/:id` updates tags.
-- [ ] `PATCH /articles/:id` prevents another writer from editing draft.
-- [ ] `POST /articles/:id/publish` publishes draft.
-- [ ] Published draft appears in `GET /articles`.
-- [ ] `DELETE /articles/:id` deletes own article.
-- [ ] Deleted article returns 404.
+- [x] `POST /articles` creates a draft for writer.
+- [x] `POST /articles` creates a draft for admin.
+- [x] `POST /articles` prevents guest.
+- [x] `POST /articles` prevents ordinary user if write role is required.
+- [x] `POST /articles` rejects empty title.
+- [x] `POST /articles` rejects empty content.
+- [x] `POST /articles` rejects `readTime` less than 1.
+- [x] `POST /articles` accepts tags array.
+- [x] `GET /articles` is public.
+- [x] `GET /articles` returns published articles.
+- [x] `GET /articles` does not return drafts.
+- [x] `GET /articles` supports pagination.
+- [x] `GET /articles` supports `search`.
+- [x] `GET /articles` supports `authorId`.
+- [x] `GET /articles` supports comma-separated `tags`.
+- [x] `GET /articles` supports `minLikes`.
+- [x] `GET /articles` supports `createdAfter`.
+- [x] `GET /articles` supports `sortBy=createdAt`.
+- [x] `GET /articles` supports `sortBy=updatedAt`.
+- [x] `GET /articles` supports `order=ASC` and `order=DESC`.
+- [x] `GET /articles/drafts` returns writer's own drafts.
+- [x] `GET /articles/drafts` returns 401 for guest.
+- [x] `GET /articles/author/:authorId` is public.
+- [x] `GET /articles/:id` returns published article for guest.
+- [x] `GET /articles/:id` returns own draft for author.
+- [x] `GET /articles/:id` prevents another writer from reading private draft.
+- [x] `PATCH /articles/:id` updates title.
+- [x] `PATCH /articles/:id` updates content.
+- [x] `PATCH /articles/:id` updates image URL.
+- [x] `PATCH /articles/:id` rejects invalid image URL.
+- [x] `PATCH /articles/:id` updates readTime.
+- [x] `PATCH /articles/:id` updates tags.
+- [x] `PATCH /articles/:id` prevents another writer from editing draft.
+- [x] `POST /articles/:id/publish` publishes draft.
+- [x] Published draft appears in `GET /articles`.
+- [x] `DELETE /articles/:id` deletes own article.
+- [x] Deleted article returns 404.
 
 ## Task 8: Backend API Coverage - Tags
 
 **Files:**
 - Create: `e2e/tests/api/tags.api.spec.ts`
 
-- [ ] `POST /tags` creates tag.
-- [ ] `GET /tags` returns created tag.
-- [ ] `PATCH /tags/:id` renames tag.
-- [ ] `DELETE /tags/:id` removes tag.
-- [ ] Empty tag name returns validation error if DTO enforces it.
-- [ ] Duplicate tag name returns conflict or documented behavior.
-- [ ] Invalid UUID returns 400.
-- [ ] Deleting tag used by article returns documented behavior.
-- [ ] Verify whether tag mutation endpoints require auth. If they are unintentionally public, add `test.fixme(true, 'BUG: tag mutations are public')`.
+- [x] `POST /tags` creates tag.
+- [x] `GET /tags` returns created tag.
+- [x] `PATCH /tags/:id` renames tag.
+- [x] `DELETE /tags/:id` removes tag.
+- [x] Empty tag name returns validation error if DTO enforces it.
+- [x] Duplicate tag name returns conflict or documented behavior.
+- [x] Invalid UUID returns 400.
+- [x] Deleting tag used by article returns documented behavior.
+- [x] Verify whether tag mutation endpoints require auth. If they are unintentionally public, add `test.fixme(true, 'BUG: tag mutations are public')`.
 
 ## Task 9: Backend API Coverage - Comments
 
 **Files:**
 - Create: `e2e/tests/api/comments.api.spec.ts`
 
-- [ ] `POST /comments` creates root comment for article.
-- [ ] `POST /comments` creates root comment for todo.
-- [ ] `POST /comments` creates reply with `parentId`.
-- [ ] Reply has correct `depth`.
-- [ ] `GET /comments/:id` returns created comment.
-- [ ] `GET /comments/:entityType/:entityId` lists article comments.
-- [ ] `GET /comments/:entityType/:entityId` lists todo comments.
-- [ ] Listing supports `order=ASC`.
-- [ ] Listing supports `order=DESC`.
-- [ ] Listing supports `page` and `limit`.
-- [ ] `PATCH /comments/:id` lets author edit.
-- [ ] `DELETE /comments/:id` lets author delete.
-- [ ] Admin can delete another user's comment if service supports moderation.
-- [ ] Guest requests return 401.
-- [ ] Empty content returns 400.
-- [ ] Invalid `entityType` returns 400.
-- [ ] Invalid UUID returns 400.
-- [ ] Non-author mutation returns 403.
-- [ ] Parent comment from another entity is rejected.
+- [x] `POST /comments` creates root comment for article.
+- [x] `POST /comments` creates root comment for todo.
+- [x] `POST /comments` creates reply with `parentId`.
+- [x] Reply has correct `depth`.
+- [x] `GET /comments/:id` returns created comment.
+- [x] `GET /comments/:entityType/:entityId` lists article comments.
+- [x] `GET /comments/:entityType/:entityId` lists todo comments.
+- [x] Listing supports `order=ASC`.
+- [x] Listing supports `order=DESC`.
+- [x] Listing supports `page` and `limit`.
+- [x] `PATCH /comments/:id` lets author edit.
+- [x] `DELETE /comments/:id` lets author delete.
+- [x] Admin can delete another user's comment if service supports moderation.
+- [x] Guest requests return 401.
+- [x] Empty content returns 400.
+- [x] Invalid `entityType` returns 400.
+- [x] Invalid UUID returns 400.
+- [x] Non-author mutation returns 403.
+- [x] Parent comment from another entity is rejected.
 
 ## Task 10: Backend API Coverage - Likes
 
 **Files:**
 - Create: `e2e/tests/api/likes.api.spec.ts`
 
-- [ ] `POST /likes/article/:id` likes article.
-- [ ] `DELETE /likes/article/:id` unlikes article.
-- [ ] Article `likesCount` and `hasLiked` update after like and unlike.
-- [ ] `POST /likes/todo/:id` likes todo.
-- [ ] `DELETE /likes/todo/:id` unlikes todo.
-- [ ] Todo `likesCount` and `hasLiked` update after like and unlike.
-- [ ] `POST /likes/comment/:id` likes comment.
-- [ ] `DELETE /likes/comment/:id` unlikes comment.
-- [ ] Comment `likesCount` and `hasLiked` update after like and unlike.
-- [ ] Repeated like by same user does not create duplicate.
-- [ ] Unlike without existing like returns documented behavior.
-- [ ] Guest requests return 401.
-- [ ] Invalid entity type returns 400.
-- [ ] Invalid UUID returns 400.
-- [ ] Missing entity returns 404.
+- [x] `POST /likes/article/:id` likes article.
+- [x] `DELETE /likes/article/:id` unlikes article.
+- [x] Article `likesCount` and `hasLiked` update after like and unlike.
+- [x] `POST /likes/todo/:id` likes todo.
+- [x] `DELETE /likes/todo/:id` unlikes todo.
+- [x] Todo `likesCount` and `hasLiked` update after like and unlike.
+- [x] `POST /likes/comment/:id` likes comment.
+- [x] `DELETE /likes/comment/:id` unlikes comment.
+- [x] Comment `likesCount` and `hasLiked` update after like and unlike.
+- [x] Repeated like by same user does not create duplicate.
+- [x] Unlike without existing like returns documented behavior.
+- [x] Guest requests return 401.
+- [x] Invalid entity type returns 400.
+- [x] Invalid UUID returns 400.
+- [x] Missing entity returns 404.
 
 ## Task 11: Backend API Coverage - Attachments
 
@@ -432,21 +444,21 @@ storage/admin.json
 - Create: `e2e/tests/api/attachments.api.spec.ts`
 - Create test files in: `e2e/data/files/`
 
-- [ ] `POST /attachments/user/:id` uploads jpeg.
-- [ ] `POST /attachments/article/:id` uploads png.
-- [ ] `POST /attachments/todo/:id` uploads webp.
-- [ ] Upload response includes `id`, `url`, `mimeType`, `size`, and `createdAt`.
-- [ ] `DELETE /attachments/:id` deletes uploaded attachment.
-- [ ] Deleted attachment cannot be deleted again or returns documented behavior.
-- [ ] Guest upload returns 401.
-- [ ] Text file upload is rejected.
-- [ ] PDF upload is rejected.
-- [ ] GIF upload is rejected.
-- [ ] File larger than 10 MB is rejected.
-- [ ] Missing file returns 400.
-- [ ] Invalid entity type returns 400.
-- [ ] Invalid UUID returns 400.
-- [ ] Upload to another user's protected entity returns 403 if ownership is enforced.
+- [x] `POST /attachments/user/:id` uploads jpeg.
+- [x] `POST /attachments/article/:id` uploads png.
+- [x] `POST /attachments/todo/:id` uploads webp.
+- [x] Upload response includes `id`, `url`, `mimeType`, `size`, and `createdAt`.
+- [x] `DELETE /attachments/:id` deletes uploaded attachment.
+- [x] Deleted attachment cannot be deleted again or returns documented behavior.
+- [x] Guest upload returns 401.
+- [x] Text file upload is rejected.
+- [x] PDF upload is rejected.
+- [x] GIF upload is rejected.
+- [x] File larger than 10 MB is rejected.
+- [x] Missing file returns 400.
+- [x] Invalid entity type returns 400.
+- [x] Invalid UUID returns 400.
+- [x] Upload to another user's protected entity returns 403 if ownership is enforced.
 
 ## Task 12: Frontend Page Objects
 

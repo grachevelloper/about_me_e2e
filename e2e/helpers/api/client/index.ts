@@ -3,7 +3,13 @@ import { expect, request, type APIRequestContext } from '@playwright/test';
 export const API_PREFIX = '/api';
 
 export function getBaseURL(): string {
-  return process.env.BASE_URL ?? 'http://localhost';
+  const baseURL = process.env.BASE_URL;
+
+  if (!baseURL) {
+    throw new Error('BASE_URL environment variable is required for e2e tests');
+  }
+
+  return baseURL;
 }
 
 export async function newApiContext(options: { storageState?: string } = {}): Promise<APIRequestContext> {

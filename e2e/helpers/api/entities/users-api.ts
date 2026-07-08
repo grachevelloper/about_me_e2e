@@ -1,16 +1,15 @@
 import type { TestUser, UserResponse } from '../../../data/users';
 import { ensureAuthDir, storageStatePath, writeTestContext, type TestContext } from '../../../setup/test-context';
-import { API_PREFIX, expectOk, newApiContext } from '..';
+import { API_PREFIX, newApiContext } from '../client';
+import { expectOk } from '../../assertions/status';
 import { updateUserRole } from '../../db';
-
-export const userKeys = ['userA', 'userB', 'writerA', 'writerB', 'admin'] as const;
 
 export function buildUsers(runId: string): TestUser[] {
   return [
-    { key: 'userA', role: 'User', username: `${runId}-user-a`, email: `${runId}-user-a@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('userA') },
-    { key: 'userB', role: 'User', username: `${runId}-user-b`, email: `${runId}-user-b@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('userB') },
-    { key: 'writerA', role: 'Writer', username: `${runId}-writer-a`, email: `${runId}-writer-a@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('writerA') },
-    { key: 'writerB', role: 'Writer', username: `${runId}-writer-b`, email: `${runId}-writer-b@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('writerB') },
+    { key: 'primaryUser', role: 'User', username: `${runId}-primary-user`, email: `${runId}-primary-user@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('primaryUser') },
+    { key: 'secondaryUser', role: 'User', username: `${runId}-secondary-user`, email: `${runId}-secondary-user@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('secondaryUser') },
+    { key: 'writer', role: 'Writer', username: `${runId}-writer`, email: `${runId}-writer@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('writer') },
+    { key: 'secondaryWriter', role: 'Writer', username: `${runId}-secondary-writer`, email: `${runId}-secondary-writer@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('secondaryWriter') },
     { key: 'admin', role: 'Admin', username: `${runId}-admin`, email: `${runId}-admin@e2e.local`, password: 'Password123', storageStatePath: storageStatePath('admin') },
   ];
 }
