@@ -1,0 +1,86 @@
+import type { Article } from '../../../data/articles';
+import type { TestContext } from '../../../setup/test-context';
+import { API_PREFIX, newApiContext } from '../client';
+import { expectOk } from '../../assertions/status';
+import type { PaginatedResponse } from '../../assertions/pagination';
+
+export async function createDraftArticle(
+  context: TestContext,
+  author: 'writer' | 'secondaryWriter' | 'admin' = 'writer',
+  overrides: Partial<Pick<Article, 'title' | 'content' | 'readTime' | 'tags'>> = {},
+): Promise<Article> {
+  const user = context.users[author];
+  const api = await newApiContext({ storageState: user.storageStatePath });
+
+  try {
+    const response = await api.post(`${API_PREFIX}/articles`, {
+      data: {
+        title: overrides.title ?? `${context.runId} draft article`,
+        content: overrides.content ?? `${context.runId} draft content`,
+        readTime: overrides.readTime ?? 3,
+        ...(overrides.tags !== undefined ? { tags: overrides.tags } : {}),
+      },
+    });
+    await expectOk(response);
+    return (await response.json()) as Article;
+  } finally {
+    await api.dispose();
+  }
+}
+
+export async function publishArticle(context: TestContext, articleId: string, author: 'writer' | 'secondaryWriter' | 'admin' = 'writer'): Promise<Article> {
+  const user = context.users[author];
+  const api = await newApiContext({ storageState: user.storageStatePath });
+
+  try {
+    const response = await api.post(`${API_PREFIX}/articles/${articleId}/publish`);
+    await expectOk(response);
+    return (await response.json()) as Article;
+  } finally {
+    await api.dispose();
+  }
+}
+
+export async function updateArticle(
+  context: TestContext,
+  articleId: string,
+  author: 'writer' | 'secondaryWriter' | 'admin' = 'writer',
+  data: Partial<Pick<Article, 'title' | 'content' | 'readTime' | 'image' | 'tags'>>,
+): Promise<Article> {
+  const user = context.users[author];
+  const api = await newApiContext({ storageState: user.storageStatePath });
+
+  try {
+    const response = await api.patch(`${API_PREFIX}/articles/${articleId}`, { data });
+    await expectOk(response);
+    return (await response.json()) as Article;
+  } finally {
+    await api.dispose();
+  }
+}
+
+export async function listArticles(search?: string): Promise<PaginatedResponse<Article>> {
+  const api = await newApiContext();
+
+  try {
+    const response = await api.get(`${API_PREFIX}/articles`, {
+      params: search ? { search } : undefined,
+    });
+    await expectOk(response);
+    return (await response.json()) as PaginatedResponse<Article>;
+  } finally {
+    await api.dispose();
+  }
+}
+
+export async function getArticle(articleId: string, storageState?: string): Promise<Article> {
+  const api = await newApiContext({ storageState });
+
+  try {
+    const response = await api.get(`${API_PREFIX}/articles/${articleId}`);
+    await expectOk(response);
+    return (await response.json()) as Article;
+  } finally {
+    await api.dispose();
+  }
+}
