@@ -1,15 +1,18 @@
 import { test as base, type APIRequestContext, type Page } from '@playwright/test';
 
 import { ArticlesPage } from '../pages/articles/ArticlesPage';
+import { ArticlePage } from '../pages/articles/ArticlePage';
 import { DraftEditorPage } from '../pages/articles/DraftEditorPage';
 import { DraftsPage } from '../pages/articles/DraftsPage';
 import { LoginPage } from '../pages/auth/LoginPage';
 import { RegistrationPage } from '../pages/auth/RegistrationPage';
+import { CommentsPanel } from '../pages/comments/CommentsPanel';
 import { ErrorPage } from '../pages/errors/ErrorPage';
+import { AppShell } from '../pages/navigation/AppShell';
+import { ChecklistPanel } from '../pages/todos/ChecklistPanel';
 import { NewTodoPage } from '../pages/todos/NewTodoPage';
 import { TodoDetailsPage } from '../pages/todos/TodoDetailsPage';
 import { newApiContext } from '../helpers/api/client';
-import { AppShell } from '../helpers/navigation/AppShell';
 import { readTestContext, type TestContext } from '../setup/test-context';
 
 type AppFixtures = {
@@ -21,7 +24,10 @@ type AppFixtures = {
   secondaryWriterApi: APIRequestContext;
   adminApi: APIRequestContext;
   appShell: AppShell;
+  articlePage: ArticlePage;
   articlesPage: ArticlesPage;
+  checklistPanel: ChecklistPanel;
+  commentsPanel: CommentsPanel;
   draftEditorPage: DraftEditorPage;
   draftsPage: DraftsPage;
   errorPage: ErrorPage;
@@ -97,8 +103,17 @@ export const test = base.extend<AppFixtures>({
   appShell: async ({ page }, use) => {
     await use(new AppShell(page));
   },
+  articlePage: async ({ page }, use) => {
+    await use(new ArticlePage(page));
+  },
   articlesPage: async ({ page }, use) => {
     await use(new ArticlesPage(page));
+  },
+  checklistPanel: async ({ page }, use) => {
+    await use(new ChecklistPanel(page));
+  },
+  commentsPanel: async ({ page }, use) => {
+    await use(new CommentsPanel(page));
   },
   draftEditorPage: async ({ page }, use) => {
     await use(new DraftEditorPage(page));

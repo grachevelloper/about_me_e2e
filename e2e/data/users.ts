@@ -23,10 +23,14 @@ export interface UserResponse {
 
 export function uniqueUser(runId: string, label: string): Omit<TestUser, 'key' | 'role' | 'storageStatePath'> {
   const safeLabel = label.toLowerCase().replaceAll(/[^a-z0-9-]/g, '-');
+  const suffix = Date.now().toString(36);
+  const safeRunId = runId.toLowerCase().replaceAll(/[^a-z0-9-]/g, '-');
+  const username = `${safeRunId}-${safeLabel}-${suffix}`.slice(0, 50).replace(/-+$/g, '');
+  const emailLocalPart = `${safeRunId}-${safeLabel}-${suffix}`.slice(0, 60).replace(/-+$/g, '');
 
   return {
-    username: `${runId}-${safeLabel}`,
-    email: `${runId}-${safeLabel}-${Date.now()}@e2e.local`,
+    username,
+    email: `${emailLocalPart}@e2e.local`,
     password: 'Password123',
   };
 }

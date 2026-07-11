@@ -14,4 +14,8 @@ export class ErrorPage {
   async expectNoPermission(): Promise<void> {
     await expect(this.page.locator('body')).toContainText(/permission|доступ|прав/i);
   }
+
+  async goBack(): Promise<void> {
+    await this.page.getByRole('button', { name: /go back|назад/i }).click();
+  }
 }

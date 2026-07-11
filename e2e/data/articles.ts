@@ -7,6 +7,10 @@ export interface Article {
   likesCount: number;
   isDraft: boolean;
   hasLiked: boolean;
+  author?: { id: string };
+  tags?: { id: string; name: string }[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export function validArticle(runId: string, label = 'article'): Pick<Article, 'title' | 'content' | 'readTime'> {
