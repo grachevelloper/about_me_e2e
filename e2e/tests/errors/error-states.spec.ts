@@ -10,7 +10,6 @@ import { TodoDetailsPage } from '../../pages/todos/TodoDetailsPage';
 
 test.describe('error states', () => {
   test('missing article shows not-found state or redirects to not-found route', async ({ errorPage }) => {
-    test.fixme(true, 'BUG: missing article renders a blank article page instead of a not-found state');
 
     await errorPage.open('/articles/00000000-0000-4000-8000-000000000000');
 
@@ -24,7 +23,6 @@ test.describe('error states', () => {
   });
 
   test('articles list handles API 500 without infinite skeleton', async ({ page }) => {
-    test.fixme(true, 'BUG: articles list hides API 500 behind empty content instead of a visible error state');
 
     await page.route('**/api/articles**', (route) => {
       if (route.request().method() === 'GET') {
@@ -41,7 +39,6 @@ test.describe('error states', () => {
   });
 
   test('todo details handles API 500 with visible error state', async ({ page, app }, testInfo) => {
-    test.fixme(true, 'BUG: todo details renders "Is Pending occurred" for API 500 instead of a user-visible error state');
 
     const label = `${app.runId}-${testInfo.project.name}-todo-error`;
     const todo = await createTodo(app, 'primaryUser', {
@@ -113,7 +110,6 @@ test.describe('error states', () => {
   });
 
   test('direct reload works on public todo detail route', async ({ page, app }, testInfo) => {
-    test.fixme(true, 'BUG: public todo detail reload renders not-found while API allows public read for exposed todos');
 
     const label = `${app.runId}-${testInfo.project.name}-reload-todo`;
     const todo = await createTodo(app, 'primaryUser', {

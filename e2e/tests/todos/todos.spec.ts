@@ -8,7 +8,6 @@ import { NewTodoPage } from '../../pages/todos/NewTodoPage';
 
 test.describe('todos', () => {
   test('authenticated user creates todo and anonymous user can read it', async ({ todoDetailsPage, app }) => {
-    test.fixme(true, 'BUG: todos created by regular users are not exposed through public todo list/details');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} readable todo`,
@@ -23,7 +22,6 @@ test.describe('todos', () => {
   });
 
   test('main page renders about/current sections and opens a public todo row', async ({ page, todoDetailsPage, app }) => {
-    test.fixme(true, 'BUG: frontend public todo route/list can render pending/error state for todos moved to the public owner');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} public row todo`,
@@ -42,7 +40,6 @@ test.describe('todos', () => {
   });
 
   test('guest can open public todo details with title and content', async ({ todoDetailsPage, app }) => {
-    test.fixme(true, 'BUG: frontend redirects or renders pending/error state for public todo details while API allows public read');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} guest readable todo`,
@@ -79,7 +76,6 @@ test.describe('todos', () => {
   });
 
   test('owner can edit todo title and content and changes persist after reload', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: inline todo edit currently crashes the frontend even though PATCH /todos/:id works through API');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} editable todo`,
@@ -103,7 +99,6 @@ test.describe('todos', () => {
   });
 
   test('owner can change each todo priority and persist it after reload', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: changing todo priority from details currently sends the frontend to an error state with todo.priority.undefined');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} priority todo`,
@@ -215,7 +210,6 @@ test.describe('todos', () => {
   });
 
   test('guest cannot access protected todo creation UI', async ({ page }) => {
-    test.fixme(true, 'BUG: /todos/new is directly accessible to guests instead of redirecting or rendering no-permission');
 
     await page.goto('/todos/new');
 
@@ -224,7 +218,6 @@ test.describe('todos', () => {
   });
 
   test('user and writer cannot access admin-only todo creation UI', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: /todos/new is directly accessible to non-admin authenticated users');
 
     for (const role of ['primaryUser', 'writer'] as const) {
       const session = await createAuthenticatedPage(browser, app, role, (page) => ({

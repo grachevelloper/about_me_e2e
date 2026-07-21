@@ -90,7 +90,6 @@ test.describe('articles list', () => {
   });
 
   test('create article button creates a draft and opens the editor', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: articles list Create article button sends invalid draft payload and stays on /articles');
 
     const session = await createAuthenticatedPage(browser, app, 'writer', (page) => ({
       articlesPage: new ArticlesPage(page),
@@ -105,7 +104,6 @@ test.describe('articles list', () => {
   });
 
   test('draft article card click opens the editor for the author', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: author drafts are not rendered on /articles, so draft cards cannot be opened from the articles list');
 
     const label = `${app.runId}-${testInfo.project.name}-draft-card`;
     const draft = await createDraftArticle(app, 'writer', {
@@ -125,7 +123,6 @@ test.describe('articles list', () => {
   });
 
   test('search input filters articles by query', async ({ articlesPage, app }, testInfo) => {
-    test.fixme(true, 'BUG: articles search input is not wired to API query');
 
     const label = `${app.runId}-${testInfo.project.name}-search`;
     const needle = await publishArticle(

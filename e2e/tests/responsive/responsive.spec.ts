@@ -82,7 +82,6 @@ test.describe('responsive smoke', () => {
   });
 
   test('article page content does not overlap on mobile', async ({ page, app }, testInfo) => {
-    test.fixme(true, 'BUG: article detail layout has horizontal overflow on mobile');
 
     const label = `Mobile article ${Date.now()}`;
     const draft = await createDraftArticle(app, 'writer', {

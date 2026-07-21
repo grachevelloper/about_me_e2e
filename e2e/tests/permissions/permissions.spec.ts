@@ -30,7 +30,6 @@ test.describe('permissions matrix', () => {
   });
 
   test('guest can open public todo details', async ({ todoDetailsPage, app }, testInfo) => {
-    test.fixme(true, 'BUG: frontend redirects or renders pending/error state for public todo details while API allows public read');
 
     const label = `${app.runId}-${testInfo.project.name}-guest-todo`;
     const todo = await createTodo(app, 'primaryUser', {
@@ -86,7 +85,6 @@ test.describe('permissions matrix', () => {
   });
 
   test('user and writer cannot open admin-only todo creation route', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: /todos/new is directly accessible to non-admin authenticated users');
 
     for (const role of ['primaryUser', 'writer'] as const) {
       const session = await createAuthenticatedPage(browser, app, role, (page) => ({
@@ -154,7 +152,6 @@ test.describe('permissions matrix', () => {
   });
 
   test('admin can create article', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: create article action submits an empty draft content and does not open editor');
 
     const session = await createAuthenticatedPage(browser, app, 'admin', (page) => ({
       appShell: new AppShell(page),

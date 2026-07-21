@@ -18,7 +18,6 @@ test.describe('article drafts list', () => {
   });
 
   test('guest and ordinary user cannot open drafts page', async ({ browser, app, page }) => {
-    test.fixme(true, 'BUG: /articles/drafts route is not protected and renders for guest and ordinary users');
 
     await page.goto('/articles/drafts');
     await expect(page).not.toHaveURL(/\/articles\/drafts$/);
