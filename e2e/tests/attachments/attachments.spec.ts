@@ -23,7 +23,6 @@ test.describe('attachments and markdown editor UI', () => {
   });
 
   test('editor link creation button does not break content editing', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: MD editor does not expose a stable accessible link creation control for E2E interaction');
 
     const label = `${app.runId}-${testInfo.project.name}-link`;
     const draft = await createDraftArticle(app, 'writer', {

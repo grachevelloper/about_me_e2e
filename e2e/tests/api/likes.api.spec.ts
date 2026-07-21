@@ -171,8 +171,6 @@ test.describe('likes api', () => {
   });
 
   test('GET /comments/:id reflects hasLiked after comment like', async ({ app, writerApi, primaryUserApi }) => {
-    test.fail(true, 'BUG: GET /comments/:id does not calculate hasLiked for the authenticated user');
-
     const article = await createPublishedArticle(writerApi, app.runId, 'comment-get-has-liked-article');
     const comment = await createArticleComment(primaryUserApi, app.runId, 'comment-get-has-liked', article.id);
 

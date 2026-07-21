@@ -46,7 +46,6 @@ test.describe('checklist', () => {
   });
 
   test('owner can add first and subsequent checklist items', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: checklist add item UI does not render the created item even though checklist API supports item creation');
 
     const label = `${app.runId}-${testInfo.project.name}-items`;
     const todo = await createTodo(app, 'primaryUser', {
@@ -78,7 +77,6 @@ test.describe('checklist', () => {
   });
 
   test('owner can edit checklist item and cancel an inline edit', async ({ browser, app, primaryUserApi }, testInfo) => {
-    test.fixme(true, 'BUG: checklist inline edit UI does not render the updated item text even though checklist API supports item update');
 
     const label = `${app.runId}-${testInfo.project.name}-edit`;
     const todo = await createTodo(app, 'primaryUser', {

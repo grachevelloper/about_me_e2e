@@ -62,7 +62,6 @@ test.describe('comments', () => {
   });
 
   test('reply form can be opened, canceled, and used to create nested comment', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: comment authors currently cannot reply to own comments because reply action is hidden for canMutate comments');
 
     const label = `${app.runId}-${testInfo.project.name}-reply`;
     const draft = await createDraftArticle(app, 'writer', {
@@ -132,7 +131,6 @@ test.describe('comments', () => {
   });
 
   test('user can like and unlike comment and count persists after reload', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: comment like action is not exposed in the comment UI while comment likes API works');
 
     const label = `${app.runId}-${testInfo.project.name}-like`;
     const draft = await createDraftArticle(app, 'writer', {

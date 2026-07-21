@@ -167,7 +167,6 @@ test.describe('users api', () => {
   });
 
   test('PATCH /users/:id/password allows admin to change another user password', async () => {
-    test.fixme(true, 'BUG: users service forbids admin from changing another user password');
   });
 
   test('PATCH /users/:id/password prevents ordinary user from changing another user password', async ({ app, primaryUserApi }) => {

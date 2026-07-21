@@ -148,7 +148,6 @@ test.describe('auth', () => {
   });
 
   test('authenticated refresh restores session after page reload', async ({ loginPage, appShell, app }) => {
-    test.fixme(true, 'BUG: authenticated reload redirects back to signin instead of restoring the session');
 
     await loginPage.open();
     await loginPage.login(app.users.primaryUser.email, app.users.primaryUser.password);

@@ -96,7 +96,6 @@ test.describe('article editor', () => {
   });
 
   test('image URL autosaves and valid image preview appears', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: draft image input updates preview but does not persist the image URL through autosave');
 
     const label = `${app.runId}-${testInfo.project.name}-image`;
     const draft = await createDraftArticle(app, 'writer', {

@@ -76,7 +76,6 @@ test.describe('tags api', () => {
   });
 
   test('deleting tag used by article removes tag and keeps article readable', async ({ app, writerApi, adminApi, guestApi }) => {
-    test.fixme(true, 'BUG: deleting a tag attached to an article returns 500');
 
     const tagName = `${app.runId}-used-tag`;
     const createdArticle = await writerApi.post(`${API_PREFIX}/articles`, {

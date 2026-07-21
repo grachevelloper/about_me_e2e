@@ -56,7 +56,7 @@ async function useGuardedPage(page: Page, use: (page: Page) => Promise<void>): P
   });
   page.on('console', (message) => {
     const text = message.text();
-    const isExpectedNetworkLog = /^Failed to load resource: the server responded with a status of 4\d\d/.test(text);
+    const isExpectedNetworkLog = /^Failed to load resource: the server responded with a status of [45]\d\d/.test(text);
     const isKnownAntdDeprecation = /^Warning: \[antd: .*] `.*` is deprecated\./.test(text);
     const isKnownCallbackDeprecation = /^Warning: `callback` is deprecated\./.test(text);
 

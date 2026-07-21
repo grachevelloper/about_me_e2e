@@ -80,7 +80,6 @@ test.describe('article page', () => {
   });
 
   test('missing article redirects or renders not-found state', async ({ articlePage, errorPage, page }) => {
-    test.fixme(true, 'BUG: article page renders an empty shell for missing article instead of a not-found state');
 
     const missingUuid = '00000000-0000-4000-8000-000000000000';
 

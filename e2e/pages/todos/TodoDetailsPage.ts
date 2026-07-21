@@ -46,7 +46,7 @@ export class TodoDetailsPage {
   }
 
   async expectLikeCount(count: number): Promise<void> {
-    await expect(this.page.getByRole('button', { name: /like|лайк/i }).filter({ hasText: String(count) })).toBeVisible();
+    await expect(this.page.getByRole('button', { name: /like|лайк|нрав/i }).filter({ hasText: String(count) })).toBeVisible();
   }
 
   async expectPriority(priority: TodoPriority): Promise<void> {

@@ -74,7 +74,6 @@ async function expectUploadedAttachment(response: Awaited<ReturnType<APIRequestC
 
 test.describe('attachments api', () => {
   test('POST /attachments/user/:id uploads jpeg and response includes public metadata', async ({ app, primaryUserApi }) => {
-    test.fixme(true, 'BUG: attachments validator rejects valid image/jpeg uploads');
 
     const { response, size } = await uploadAttachment(primaryUserApi, 'user', app.users.primaryUser.id, uploadFiles.jpeg);
     const attachment = await expectUploadedAttachment(response, { mimeType: uploadFiles.jpeg.mimeType, size });
@@ -83,7 +82,6 @@ test.describe('attachments api', () => {
   });
 
   test('POST /attachments/article/:id uploads png', async ({ app, writerApi }) => {
-    test.fixme(true, 'BUG: attachments validator rejects valid image/png uploads');
 
     const article = await createDraftArticle(app, 'writer', {
       title: `${app.runId} attachment article`,
@@ -97,7 +95,6 @@ test.describe('attachments api', () => {
   });
 
   test('POST /attachments/todo/:id uploads webp', async ({ app, primaryUserApi }) => {
-    test.fixme(true, 'BUG: attachments validator rejects valid image/webp uploads');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} attachment todo`,
@@ -111,7 +108,6 @@ test.describe('attachments api', () => {
   });
 
   test('DELETE /attachments/:id deletes uploaded attachment and second delete returns 404', async ({ app, primaryUserApi }) => {
-    test.fixme(true, 'BUG: valid image uploads are rejected, so delete cannot create an attachment yet');
 
     const { response, size } = await uploadAttachment(primaryUserApi, 'user', app.users.primaryUser.id, uploadFiles.jpeg);
     const attachment = await expectUploadedAttachment(response, { mimeType: uploadFiles.jpeg.mimeType, size });
@@ -168,7 +164,6 @@ test.describe('attachments api', () => {
   });
 
   test('missing target returns 404', async ({ primaryUserApi }) => {
-    test.fixme(true, 'BUG: valid image upload validation runs before target lookup and currently rejects image/jpeg');
 
     const { response } = await uploadAttachment(primaryUserApi, 'user', missingUuid, uploadFiles.jpeg);
 
@@ -176,7 +171,6 @@ test.describe('attachments api', () => {
   });
 
   test('upload to another user protected entity returns 403', async ({ app, primaryUserApi, secondaryUserApi }) => {
-    test.fixme(true, 'BUG: valid image upload validation currently rejects image/jpeg before ownership check');
 
     const todo = await createTodo(app, 'primaryUser', {
       title: `${app.runId} attachment forbidden todo`,

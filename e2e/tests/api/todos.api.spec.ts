@@ -21,8 +21,6 @@ test.describe('todos api', () => {
 
   for (const priority of todoPriorities) {
     test(`POST /todos accepts priority ${priority}`, async ({ app, primaryUserApi }) => {
-      test.fixme(priority === 'High', 'BUG: todo_priority database enum contains Hight instead of High');
-
       const payload = validTodo(app.runId, `priority-${priority}`);
       const response = await primaryUserApi.post(`${API_PREFIX}/todos`, { data: { ...payload, priority } });
 

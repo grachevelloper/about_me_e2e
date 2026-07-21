@@ -24,7 +24,6 @@ test.describe('accessibility smoke', () => {
   });
 
   test('like buttons expose aria-label and aria-pressed', async ({ browser, app }, testInfo) => {
-    test.fixme(true, 'BUG: like buttons expose pressed state but do not consistently expose an aria-label');
 
     const label = `${app.runId}-${testInfo.project.name}-likes-a11y`;
     const draft = await createDraftArticle(app, 'writer', {
@@ -84,7 +83,6 @@ test.describe('accessibility smoke', () => {
   });
 
   test('Enter key works for checklist add item', async ({ browser, app, primaryUserApi }, testInfo) => {
-    test.fixme(true, 'BUG: checklist add item UI does not render the created item even though checklist API supports item creation');
 
     const label = `${app.runId}-${testInfo.project.name}-checklist-enter`;
     const todo = await createTodo(app, 'primaryUser', {

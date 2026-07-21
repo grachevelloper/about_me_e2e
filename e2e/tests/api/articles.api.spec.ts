@@ -89,7 +89,6 @@ test.describe('articles api', () => {
   });
 
   test('POST /articles prevents ordinary user if write role is required', async ({ app, primaryUserApi }) => {
-    test.fixme(true, 'BUG: backend currently allows ordinary users to create article drafts');
 
     await expectStatus(await primaryUserApi.post(`${API_PREFIX}/articles`, { data: validArticle(app.runId, 'user-create') }), 403);
   });

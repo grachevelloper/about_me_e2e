@@ -91,7 +91,6 @@ test.describe('navigation', () => {
   });
 
   test('logout confirm clears session and guest actions return', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: logout success does not clear AuthContext or rerender guest actions');
 
     const session = await createAuthenticatedPage(browser, app, 'secondaryUser', (page) => ({
       appShell: new AppShell(page),
@@ -119,7 +118,6 @@ test.describe('navigation', () => {
   });
 
   test('writer Create article action creates draft and opens editor', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: create article action submits an empty draft content and does not open editor');
 
     const session = await createAuthenticatedPage(browser, app, 'writer', (page) => ({
       appShell: new AppShell(page),
@@ -146,7 +144,6 @@ test.describe('navigation', () => {
   });
 
   test('admin Create article action creates draft and opens editor', async ({ browser, app }) => {
-    test.fixme(true, 'BUG: create article action submits an empty draft content and does not open editor');
 
     const session = await createAuthenticatedPage(browser, app, 'admin', (page) => ({
       appShell: new AppShell(page),
@@ -160,7 +157,6 @@ test.describe('navigation', () => {
   });
 
   test('sidebar collapse and expand buttons work on desktop', async ({ appShell }) => {
-    test.fixme(true, 'BUG: desktop layout does not expose a general sidebar collapse control');
 
     await appShell.open('/');
     await appShell.toggleSidebar();
